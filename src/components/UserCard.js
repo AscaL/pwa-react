@@ -1,32 +1,51 @@
 import React from 'react';
-import axios from 'axios';
 
-/*
-  Store users in an array to make things easier.
-  Store a reference to #content-area in a variable for quick access.
-  Store the Random User Generator URI we're using in a variable.
-*/
-const users = null;
-let contentArea = null;
-let UC = null;
-const usersEndpoint =
-  'https://randomuser.me/api?seed=%22ph%27nglui%20mglw%27nafh%20Cthulhu%20R%27lyeh%20wgah%27nagl%20fhtagn%22&results=25&nat=US';
+function GenUserCards(usersArray) {
+  const UserCards = usersArray.map((user, key) =>
+    <div className="col-md-offset-1 col-lg-offset-2">
+      <div className="card fluid" id={`user_${user.login.username}`}>
+        <div className="section row">
+          <div className="col-sm-2 col-md-1">
+            <img src={user.picture.medium} alt={user.login.username} className="user-image" />
+          </div>
+          <div className="col-sm">
+            <h4 className="user-name">
+              {user.name.title} {user.name.first} {user.name.last}
+              <small>{user.login.username}</small>
+            </h4>
+          </div>
+        </div>
+        <div className="section">
+          <p className="user-email">
+            {' '}<SvgMail />&nbsp;&nbsp;{user.email}
+          </p>
+        </div>
+        <div className="section">
+          <p className="user-birth">
+            {' '}<SvgCalendar />&nbsp;&nbsp;{user.dob.split(' ')[0].split('-').reverse().join('/')}
+          </p>
+        </div>
+        <div className="section">
+          <p className="user-location">
+            {' '}<SvgMapPin />&nbsp;&nbsp;{user.location.city}, {user.location.state}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+  return UserCards;
+}
 
-// function getUsers() {
-axios
-  .get(usersEndpoint)
-  .then(response => response.data.results)
-  .then(usersArray => renderUsers(usersArray))
-  .then(userCards => console.log(userCards))
-  .catch(error => console.log(error));
-// }
-
-// Renders a list of users as cards.
-function renderUsers(usersArray) {
-  const userCards = usersArray.map((user, key) => <UserCard user={user} key={key} />);
-  console.log(userCards);
-  return userCards;
-  UC = userCards;
+export default function UserCard({ usersArray }) {
+  console.log('userarr', usersArray);
+  const UserCards = GenUserCards(usersArray);
+  return (
+    <div>
+      <h1>
+        {UserCards}
+      </h1>
+    </div>
+  );
 }
 
 /*
@@ -102,46 +121,49 @@ function SvgMapPin(props) {
 }
 
 // Functional component for the user card.
-function UserCard(props) {
-  const user = props.user;
-  return (
-    <div className="col-md-offset-1 col-lg-offset-2">
-      <div className="card fluid" id={`user_${user.login.username}`}>
-        <div className="section row">
-          <div className="col-sm-2 col-md-1">
-            <img src={user.picture.medium} alt={user.login.username} className="user-image" />
-          </div>
-          <div className="col-sm">
-            <h4 className="user-name">
-              {user.name.title} {user.name.first} {user.name.last}
-              <small>{user.login.username}</small>
-            </h4>
-          </div>
-        </div>
-        <div className="section">
-          <p className="user-email">
-            {' '}<SvgMail />&nbsp;&nbsp;{user.email}
-          </p>
-        </div>
-        <div className="section">
-          <p className="user-birth">
-            {' '}<SvgCalendar />&nbsp;&nbsp;{user.dob.split(' ')[0].split('-').reverse().join('/')}
-          </p>
-        </div>
-        <div className="section">
-          <p className="user-location">
-            {' '}<SvgMapPin />&nbsp;&nbsp;{user.location.city}, {user.location.state}
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
+// function UserCard(props) {
+//   console.log(props);
+//   console.log('user card');
+//   const user = props.user;
+//   return (
+//     <div className="col-md-offset-1 col-lg-offset-2">
+//       <div className="card fluid" id={`user_${user.login.username}`}>
+//         <div className="section row">
+//           <div className="col-sm-2 col-md-1">
+//             <img src={user.picture.medium} alt={user.login.username} className="user-image" />
+//           </div>
+//           <div className="col-sm">
+//             <h4 className="user-name">
+//               {user.name.title} {user.name.first} {user.name.last}
+//               <small>{user.login.username}</small>
+//             </h4>
+//           </div>
+//         </div>
+//         <div className="section">
+//           <p className="user-email">
+//             {' '}<SvgMail />&nbsp;&nbsp;{user.email}
+//           </p>
+//         </div>
+//         <div className="section">
+//           <p className="user-birth">
+//             {' '}<SvgCalendar />&nbsp;&nbsp;{user.dob.split(' ')[0].split('-').reverse().join('/')}
+//           </p>
+//         </div>
+//         <div className="section">
+//           <p className="user-location">
+//             {' '}<SvgMapPin />&nbsp;&nbsp;{user.location.city}, {user.location.state}
+//           </p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
 
-export default function User() {
-  return (
-    <div>
-      {UC}
-    </div>
-  ), contentArea;
-}
+// export default function User() {
+//   console.log('user');
+//   return (
+//     <div>
+//       <UserCard />
+//     </div>
+//   );
+// }
